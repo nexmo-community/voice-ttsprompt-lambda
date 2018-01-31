@@ -70,9 +70,8 @@ def call():
     r = DB_CLIENT.put_item(TableName=NAME, Item=item)
     data = {'to': [{'type': 'phone', 'number': data['to']}],
       'from': {'type': 'phone', 'number': data['from']},
-      #'answer_url': [req['x-forwarded-proto'] + "://" + req['host'] + "/api/answer/"+tid],
-      'answer_url': [req['x-forwarded-proto'] + "://" + req['host'] + "/answer/"+tid],
-      'event_url' : [req['x-forwarded-proto'] + "://" + req['host'] + "/event/" + tid ]
+      'answer_url': [req['x-forwarded-proto'] + "://" + req['host'] + "/api/answer/"+tid],
+      'event_url' : [req['x-forwarded-proto'] + "://" + req['host'] + "/api/event/" + tid ]
     }
     if 'authorization' in req.keys():
         headers = {}
@@ -100,8 +99,7 @@ def answer(tid):
     n = {}
     n['action'] = "input"
     n['maxDigits'] = len(data['pin_code']['S'])
-    #n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/api/input/" + tid + "?count=1"]
-    n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/input/" + tid + "?count=1"]
+    n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/api/input/" + tid + "?count=1"]
     ncco.append(n)
     return ncco
 
@@ -138,8 +136,7 @@ def input(tid):
         n['action'] = "input"
         n['maxDigits'] = len(data['pin_code']['S'])
         count += 1
-        #n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/api/input/" + tid + "?count="+str(count)]
-        n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/input/" + tid + "?count="+str(count)]
+        n['eventUrl'] = [req['headers']['x-forwarded-proto'] + "://" + req['headers']['host'] + "/api/input/" + tid + "?count="+str(count)]
         ncco.append(n)
     else:
         ncco = []
