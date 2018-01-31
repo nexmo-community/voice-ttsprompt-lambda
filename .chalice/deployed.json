@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "api_handler_name": "TTSPrompt-dev",
+    "api_handler_arn": "arn:aws:lambda:us-east-1:219107462770:function:TTSPrompt-dev",
+    "lambda_functions": {},
+    "backend": "api",
+    "chalice_version": "1.0.0",
+    "rest_api_id": "5rxpo8gw8j",
+    "api_gateway_stage": "api",
+    "region": "us-east-1"
+  }
+}
