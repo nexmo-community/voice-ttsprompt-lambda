@@ -1,4 +1,4 @@
-# Text to Speech with Prompt Calls, Using the challice serverless framework. 
+# Text to Speech with Prompt Calls, Using the chalice serverless framework. 
 
 The Nexmo [Voice API](https://developer.nexmo.com) offers great flexibility in the call scenarios you can achive, however in order to do this you often need to make several interactions with the API, For some scenarios you may want to have a single API call from your business logic that invokes a series of interactions with the Voice API. This is an ideal scenario to build a serverless application that you can then call and let it deal with the Voice API interactions.
 In this example we will show you how to place a Text to Speech call which will play a message to a recipient then ask them to enter some digits on their keypad, perhaps to confirm a PIN number, you will then get a callback to a URL you specify once the interaction has completed. This is very similar to the deprecated TTS Prompt API that Nexmo offered but giving you greater flexibility.
