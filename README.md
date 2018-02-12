@@ -85,11 +85,11 @@ Edit the url to match the one you were given when you deplpyed your funciton
 curl -X "POST" "https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call" \
  --data-urlencode "private_key=`cat private.key`" \
  -d "app_id=684027bc-a2e7-48b1-b4bd-adc02324e09c" \
- -d "to=447970513607" \
- -d "from=447520616161" \
+ -d "to=14155550100" \
+ -d "from=14155550101" \
  -d "text='Enter the pin'" \
  -d "pin_code=1234" \
- -d "callback=https://2bwz8nkbmfgc.runscope.net/callback" \
+ -d "callback=https://example.com/callback" \
  -d "callback_method=post" \
  -d "bye_text='thankyou'" \
  -d "failed_text='try again'"
