@@ -3,8 +3,12 @@ import requests
 import boto3
 import uuid
 import nexmo
+import sys
 
-
+if sys.version_info[0] == 3:
+    from urllib.parse import urlparse, parse_qsl
+else:
+    from urlparse import urlparse, parse_qsl
 
 NAME = "TTSPrompt"
 
@@ -16,16 +20,6 @@ DB_RES = boto3.resource('dynamodb')
 MAXAGE = 3600
 
 
-@app.route('/introspect', methods=['GET', 'POST'])
-def introspect():
-    return app.current_request.to_dict()
-
-@app.route('/auth', methods=['POST'])
-def authtest():
-    data = app.current_request.json_body
-    client = nexmo.Client(application_id=data['app_id'], private_key=data['private_key'], key='dummy', secret='dummy')
-    return client._Client__headers()
-    
     
     
 @app.route('/setup')
@@ -51,10 +45,13 @@ def setup():
         return table
 
 
-@app.route('/call', methods=['POST'])
+@app.route('/call', methods=['POST'], content_types=['application/x-www-form-urlencoded', 'application/json'])
 def call():
     req = app.current_request.headers
-    data = app.current_request.json_body
+    if req['content-type'] == 'application/json':
+        data = app.current_request.json_body
+    else:
+        data = dict(parse_qsl(app.current_request.raw_body.decode()))
     tid = str(uuid.uuid4())
     item={
         'tid': {'S':tid},
@@ -68,7 +65,7 @@ def call():
         'stage':{'S':'error'}
     }
     r = DB_CLIENT.put_item(TableName=NAME, Item=item)
-    data = {'to': [{'type': 'phone', 'number': data['to']}],
+    call = {'to': [{'type': 'phone', 'number': data['to']}],
       'from': {'type': 'phone', 'number': data['from']},
       'answer_url': [req['x-forwarded-proto'] + "://" + req['host'] + "/api/answer/"+tid],
       'event_url' : [req['x-forwarded-proto'] + "://" + req['host'] + "/api/event/" + tid ]
@@ -76,11 +73,11 @@ def call():
     if 'authorization' in req.keys():
         headers = {}
         headers['authorization'] = req['authorization']
-        response = requests.post('https://api.nexmo.com/v1/calls', json=data, headers=headers)
+        response = requests.post('https://api.nexmo.com/v1/calls', json=call, headers=headers)
     else:
+        print(data['private_key'])
         client = nexmo.Client(application_id=data['app_id'], private_key=data['private_key'], key='dummy', secret='dummy')
-        client.api_host = 'api-nexmo-com-e9tmmd4mtzkl.runscope.net'
-        response = client.create_call(data)
+        response = client.create_call(call)
     return {"tid" : tid}
     
 

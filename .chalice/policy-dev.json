@@ -11,7 +11,7 @@
       "Resource": [
         "*"
       ],
-      "Sid": "24f7f096762047a98aef7b2eca1cd0da"
+      "Sid": "a2517239cb4941c7b0aea1d141c26857"
     },
     {
       "Effect": "Allow",
