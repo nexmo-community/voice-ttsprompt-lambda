@@ -6,12 +6,13 @@
       "Action": [
         "dynamodb:CreateTable",
         "dynamodb:GetItem",
-        "dynamodb:PutItem"
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
       ],
       "Resource": [
         "*"
       ],
-      "Sid": "a2517239cb4941c7b0aea1d141c26857"
+      "Sid": "09b363299ebd4720b3090f2d20281b17"
     },
     {
       "Effect": "Allow",

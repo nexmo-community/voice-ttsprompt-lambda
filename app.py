@@ -19,7 +19,29 @@ DB_CLIENT = boto3.client('dynamodb')
 DB_RES = boto3.resource('dynamodb')
 MAXAGE = 3600
 
+def callback(tid):
+    r = DB_CLIENT.get_item(TableName=NAME, Key={'tid':{'S':tid}})
+    data = r['Item']
+    url = data['callback']['S']
+    method = data['callback_method']['S']
+    result = data['stage']['S']
+    payload = {'tid' : tid, 'status' : result, 'to' : data['to']['S']}
+    if method == 'GET':
+        resp = requests.get(url, params=payload)
+    elif method == 'POST':
+        resp = requests.post(url, data=payload)
+    print(resp)
 
+    
+def update(tid, stage):
+    r = DB_CLIENT.update_item(
+        TableName=NAME,
+        Key={'tid':{'S':tid}},
+        UpdateExpression="set stage = :s",
+        ExpressionAttributeValues={':s': {'S':stage} },
+        ReturnValues="UPDATED_NEW"
+    )
+    print(r)
     
     
 @app.route('/setup')
@@ -42,7 +64,7 @@ def setup():
                 'WriteCapacityUnits': 10
             }
         )
-        return table
+        return {"result" : "ok"}
 
 
 @app.route('/call', methods=['POST'], content_types=['application/x-www-form-urlencoded', 'application/json'])
@@ -75,7 +97,6 @@ def call():
         headers['authorization'] = req['authorization']
         response = requests.post('https://api.nexmo.com/v1/calls', json=call, headers=headers)
     else:
-        print(data['private_key'])
         client = nexmo.Client(application_id=data['app_id'], private_key=data['private_key'], key='dummy', secret='dummy')
         response = client.create_call(call)
     return {"tid" : tid}
@@ -140,26 +161,4 @@ def input(tid):
         update(tid, 'failed')
     return ncco
     
-def callback(tid):
-    r = DB_CLIENT.get_item(TableName=NAME, Key={'tid':{'S':tid}})
-    data = r['Item']
-    url = data['callback']['S']
-    method = data['callback_method']['S']
-    result = data['stage']['S']
-    payload = {'tid' : tid, 'status' : result, 'to' : data['to']['S']}
-    if method == 'GET':
-        resp = requests.get(url, params=payload)
-    elif method == 'POST':
-        resp = requests.post(url, data=payload)
-    print(resp)
 
-    
-def update(tid, stage):
-    r = DB_CLIENT.update_item(
-        TableName=NAME,
-        Key={'tid':{'S':tid}},
-        UpdateExpression="set stage = :s",
-        ExpressionAttributeValues={':s': {'S':stage} },
-        ReturnValues="UPDATED_NEW"
-    )
-    print(r)
