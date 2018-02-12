@@ -8,9 +8,6 @@ If they fail to enter the correct pin on the 3rd attempt the call will be termin
 If they successfully enter the pin they will be plated another message and then the call will terminate.
 Once the call is ended you will recieve a callback to your webhook with the transaction ID of the call and the outcome of the pin attempts.
 
-
-[View the source code on GitHub](https://github.com/nexmo-community/voice-ttsprompt-lambda)
-
 ## Prerequisites
 
 For this tutorial I  you will:
