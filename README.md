@@ -1,16 +1,16 @@
 # Text to Speech with Prompt Calls, Using the chalice serverless framework. 
 
-The Nexmo [Voice API](https://developer.nexmo.com) offers great flexibility in the call scenarios you can achive, however in order to do this you often need to make several interactions with the API, For some scenarios you may want to have a single API call from your business logic that invokes a series of interactions with the Voice API. This is an ideal scenario to build a serverless application that you can then call and let it deal with the Voice API interactions.
+The Nexmo [Voice API](https://developer.nexmo.com) offers great flexibility in the call scenarios you can achieve, however in order to do this you often need to make several interactions with the API, For some scenarios you may want to have a single API call from your business logic that invokes a series of interactions with the Voice API. This is an ideal scenario to build a serverless application that you can then call and let it deal with the Voice API interactions.
 In this example we will show you how to place a Text to Speech call which will play a message to a recipient then ask them to enter some digits on their keypad, perhaps to confirm a PIN number, you will then get a callback to a URL you specify once the interaction has completed. This is very similar to the deprecated TTS Prompt API that Nexmo offered but giving you greater flexibility.
 
-Currently the applicaiton will call a number, play an initial message and then wait for the user to enter the pin that you specify, if they get the pin wrong they are played an error message and then allowed to retry, up to 3 attempts are allowed althugh this could be edited in your code.
+Currently the application will call a number, play an initial message and then wait for the user to enter the pin that you specify, if they get the pin wrong they are played an error message and then allowed to retry, up to 3 attempts are allowed althugh this could be edited in your code.
 If they fail to enter the correct pin on the 3rd attempt the call will be terminated with no message.
 If they successfully enter the pin they will be plated another message and then the call will terminate.
 Once the call is ended you will recieve a callback to your webhook with the transaction ID of the call and the outcome of the pin attempts.
 
 ## Prerequisites
 
-For this tutorial I  you will:
+For this tutorial you will:
 
 - Need an AWS Account (you can run this on the Lambda free tier)
 - Have the [AWS CLI tool](https://aws.amazon.com/cli/) and [Chalice Fra](http://chalice.readthedocs.io/en/latest/) installed and configured on your machine
@@ -74,12 +74,12 @@ You need to pass in the following parameters
 | failed_text       |The message to be played on an incorrect pin with retry | "Incorrect, try again"       |
 
 
-### Authenticaion
+### Authentication
 The lambda application does not hold any of your nexmo credentials instead these are passed in at the time you invoke the function and are only used for that request.
-There are 2 ways you can do this, either by generating a nexmo JWT with our libraries and putting that in the request headers or by just posting the private key and applicaitonID as part of a cURL request. It is reccomended that you use the JWT method of authentication.
+There are 2 ways you can do this, either by generating a nexmo JWT with our libraries and putting that in the request headers or by just posting the private key and applicaitonID as part of a cURL request. It is recommended that you use the JWT method of authentication.
 
 ### cURL (Private key auth)
-Edit the url to match the one you were given when you deplpyed your funciton
+Edit the url to match the one you were given when you deplpyed your function
 
 ```
 curl -X "POST" "https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call" \
@@ -97,7 +97,7 @@ curl -X "POST" "https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call"
 ```
 
 ### Python (JWT)
-Edit the url to match the one you were given when you deplpyed your funciton
+Edit the url to match the one you were given when you deplpyed your function
 
 You will need the nexmo python library, install it wit `pip install nexmo`
 
@@ -121,7 +121,7 @@ data = {
 response = requests.post("https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call", json=data, headers=headers)
 ```
 
-For either method the reponse will be a JSON object containing a transaction ID (`tid`) this is the reference for the call and will be used in the callback with the result.
+For either method the response will be a JSON object containing a transaction ID (`tid`) this is the reference for the call and will be used in the callback with the result.
 
 Example Response:
 `
