@@ -3,10 +3,10 @@
 The Nexmo [Voice API](https://developer.nexmo.com) offers great flexibility in the call scenarios you can achive, however in order to do this you often need to make several interactions with the API, For some scenarios you may want to have a single API call from your business logic that invokes a series of interactions with the Voice API. This is an ideal scenario to build a serverless application that you can then call and let it deal with the Voice API interactions.
 In this example we will show you how to place a Text to Speech call which will play a message to a recipient then ask them to enter some digits on their keypad, perhaps to confirm a PIN number, you will then get a callback to a URL you specify once the interaction has completed. This is very similar to the deprecated TTS Prompt API that Nexmo offered but giving you greater flexibility.
 
-Currently the applicaiton will call a number, play an initial message and then wait for the user to enter the pin that you specify, if they get the pin wrong they are played an error message and then allowed to retry, up to 3 attempts are allowed althugh this could be edited in your code.
+Currently the applicaiton will call a number, play an initial message and then wait for the user to enter the pin that you specify, if they get the pin wrong they are played an error message and then allowed to retry, up to 3 attempts are allowed although this could be edited in your code.
 If they fail to enter the correct pin on the 3rd attempt the call will be terminated with no message.
-If they successfully enter the pin they will be plated another message and then the call will terminate.
-Once the call is ended you will recieve a callback to your webhook with the transaction ID of the call and the outcome of the pin attempts.
+If they successfully enter the pin they will be played another message and then the call will terminate.
+Once the call has ended you will receive a callback to your webhook with the transaction ID of the call and the outcome of the pin attempts.
 
 ## Prerequisites
 
@@ -79,7 +79,7 @@ The lambda application does not hold any of your nexmo credentials instead these
 There are 2 ways you can do this, either by generating a nexmo JWT with our libraries and putting that in the request headers or by just posting the private key and applicaitonID as part of a cURL request. It is reccomended that you use the JWT method of authentication.
 
 ### cURL (Private key auth)
-Edit the url to match the one you were given when you deplpyed your funciton
+Edit the url to match the one you were given when you deployed your funciton
 
 ```
 curl -X "POST" "https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call" \
@@ -97,9 +97,9 @@ curl -X "POST" "https://910e9mcan2.execute-api.us-east-1.amazonaws.com/api/call"
 ```
 
 ### Python (JWT)
-Edit the url to match the one you were given when you deplpyed your funciton
+Edit the url to match the one you were given when you deployed your funciton
 
-You will need the nexmo python library, install it wit `pip install nexmo`
+You will need the nexmo python library, install it with `pip install nexmo`
 
 ```
 # you need the nexmo client lib to generate your JWT
@@ -141,7 +141,7 @@ When the call has been completed the Lambda function will make a callback reques
 | tid               |The transaction ID                       | 6a2827c9-4c68-46fc-b179-115f055dc0eb |
 | status            |The result                               | ok                                   |
 
-The following posisble status values could be returned:
+The following possible status values could be returned:
 
 `ok` The call completed and the user entered the correct PIN
 `failed` The call completed but the user failed to enter the correct PIN
